@@ -46,13 +46,30 @@ resource "aws_instance" "microk8s" {
       "sudo microk8s enable dashboard",
       "sudo microk8s enable dns",
       "sudo microk8s enable community",
-      "sudo microk8s enable linkerd",             # enable service mesh and observability monitoring
+      "sudo microk8s enable linkerd", # enable service mesh and observability monitoring
+      "sudo microk8s enable helm",
       "sudo snap alias microk8s.kubectl kubectl", # create alias microk8s.kubectl to kubectl
+      # create alias microk8s.linkerd to linkerd
+      "sudo snap alias microk8s.linkerd linkerd",
+      # create alias microk8s.helm to helm
+      "sudo snap alias microk8s.helm helm",
+      "linkerd check --pre",                         # check if linkerd is ready to be installed
+      "linkerd install --crds | kubectl apply -f -", # install the CRDs first
+      "linkerd install | kubectl apply -f -",        # install linkerd
+      "linkerd check",                               # check if linkerd is installed
+      "linkerd viz install | kubectl apply -f -",    # install linkerd viz
+      "linkerd viz check",                           # check if linkerd viz is installed
+      "linkerd jaeger install | kubectl apply -f -", # install linkerd jaeger
+      "linkerd jaeger check",                        # check if linkerd jaeger is installed
+      "helm repo add grafana https://grafana.github.io/helm-charts",
+      "helm install grafana -n grafana --create-namespace grafana/grafana -f https://raw.githubusercontent.com/linkerd/linkerd2/main/grafana/values.yaml",
+      "linkerd viz install --set grafana.url=grafana.grafana:3000 | kubectl apply -f -",
+      "linkerd viz dashboard &", # open linkerd dashboard
     ]
   }
 
   tags = {
-    Name  = "microk8s-instance"
+    Name  = "microk8s-instance-cluster-fww"
     Group = "prodigybe"
   }
 }
