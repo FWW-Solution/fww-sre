@@ -1,0 +1,21 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bpm-wrapper-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bpm-wrapper
+  template:
+    metadata:
+      labels:
+        app: bpm-wrapper
+    spec:
+      containers:
+        - name: bpm-wrapper
+          image: ghcr.io/fww-solution/bpm-wrapper:latest
+          env:
+            - name: DOPPLER_TOKEN
+              value: "YOUR_DOPPLER_TOKEN_VALUE"

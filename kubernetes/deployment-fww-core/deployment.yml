@@ -1,0 +1,21 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fww-core-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fww-core
+  template:
+    metadata:
+      labels:
+        app: fww-core
+    spec:
+      containers:
+        - name: fww-core
+          image: ghcr.io/fww-solution/fww-core:latest
+          env:
+            - name: DOPPLER_TOKEN
+              value: "YOUR_DOPPLER_TOKEN_VALUE"

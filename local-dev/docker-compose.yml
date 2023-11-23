@@ -27,6 +27,8 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: rabbitmq
       RABBITMQ_DEFAULT_PASS: rabbitmq
+  
+  
 
   minio:
     image: minio/minio:latest
