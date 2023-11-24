@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: fww-core
+  name: bpm-wrapper
   labels:
-    app: fww-core
+    app: bpm-wrapper
   annotations:
     linkerd.io/inject: enabled # Enable Linkerd injection
 spec:
@@ -13,4 +13,4 @@ spec:
       port: 80
       targetPort: 8080
   selector:
-    app: fww-core
+    app: bpm-wrapper

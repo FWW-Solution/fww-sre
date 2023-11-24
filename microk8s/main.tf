@@ -22,8 +22,8 @@ resource "aws_key_pair" "generated_key" {
 }
 
 resource "aws_instance" "microk8s" {
-  ami           = "ami-0309a295b1c3605cd" # Ubuntu 22.04 LTS
-  instance_type = "t2.micro"
+  ami           = "ami-078c1149d8ad719a7" # Ubuntu 22.04 LTS
+  instance_type = "t2.medium"
   key_name      = "aws_keys_pairs"
 
   vpc_security_group_ids = [
@@ -97,6 +97,12 @@ resource "aws_security_group" "microk8s" {
   ingress {
     from_port   = 6443
     to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 30080
+    to_port     = 30080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
