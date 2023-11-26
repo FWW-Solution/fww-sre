@@ -94,8 +94,14 @@ resource "aws_security_group" "tools" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    from_port   = 30080
-    to_port     = 30080
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 6379
+    to_port     = 6379
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

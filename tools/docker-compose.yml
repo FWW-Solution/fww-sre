@@ -14,7 +14,7 @@ services:
       - -c
       - max_prepared_transactions=100
   bonita:
-    image: bonita:2023.02
+    image: bonita:2023.2
     hostname: bonita.portal
     ports:
       - 8080:8080
