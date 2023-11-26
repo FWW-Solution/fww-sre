@@ -12,10 +12,17 @@ resource "aws_key_pair" "generated_key" {
   # Public Key: The public will be generated using the reference of tls_private_key.terrafrom_generated_private_key
   public_key = tls_private_key.terrafrom_generated_private_key.public_key_openssh
 
+  # Print private key pem
+  provisioner "local-exec" {
+    command = <<-EOT
+       echo '${tls_private_key.terrafrom_generated_private_key.private_key_pem}'
+     EOT
+  }
+
   # Store private key :  Generate and save private key(aws_keys_pairs.pem) in current directory
   provisioner "local-exec" {
     command = <<-EOT
-       echo '${tls_private_key.terrafrom_generated_private_key.private_key_pem}' > aws_keys_pairs.pem
+      echo '${tls_private_key.terrafrom_generated_private_key.private_key_pem}' > aws_keys_pairs.pem
        chmod 400 aws_keys_pairs.pem
      EOT
   }
@@ -46,7 +53,10 @@ resource "aws_instance" "tools" {
       "sudo chmod a+r /etc/apt/keyrings/docker.gpg",
       "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
       "sudo apt-get update",
-      "sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y"
+      "sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y",
+      "git clone https://github.com/FWW-Solution/fww-sre.git",
+      "cd fww-sre/tools",
+      "sudo docker compose up -d"
     ]
   }
 

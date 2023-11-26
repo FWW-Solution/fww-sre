@@ -1,0 +1,113 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:14.7
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  flyway-migration:
+    image: flyway/flyway
+    command: -url=jdbc:mysql://db -schemas=myschema -user=root -password=P@ssw0rd -connectRetries=60 migrate
+    volumes:
+      - .:/flyway/sql
+    depends_on:
+      - db
+  rabbitmq:
+    image: rabbitmq:3.9.10-management
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+  redis:
+    image: redis:6.2.6
+    restart: always
+    ports:
+      - 6379:6379
+  db-bonita:
+    image: bonitasoft/bonita-postgres:12.6
+    environment:
+      POSTGRES_PASSWORD: example
+    restart: always
+    command:
+      - -c
+      - max_prepared_transactions=100
+  bonita:
+    image: bonita:2023.02
+    hostname: bonita.portal
+    ports:
+      - 8080:8080
+    environment:
+      - DB_VENDOR=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=bonita
+      - DB_USER=bonita
+      - DB_PASS=bpm
+      - BIZ_DB_NAME=business_data
+      - BIZ_DB_USER=business_data
+      - BIZ_DB_PASS=bpm
+      - TENANT_LOGIN=tech_user
+      - TENANT_PASSWORD=secret
+      - PLATFORM_LOGIN=pfadmin
+      - PLATFORM_PASSWORD=pfsecret
+    restart: on-failure:2
+    depends_on:
+      - db-bonita
+    entrypoint:
+      - bash
+      - -c
+      - |
+        set -e
+        echo 'Waiting for PostgreSQL to be available'
+        maxTries=10
+        while [ "$$maxTries" -gt 0 ] && [ $$(echo 'QUIT' | nc -w 1 "$$DB_HOST" 5432; echo "$$?") -gt 0 ]; do
+            sleep 1
+            let maxTries--
+        done
+        if [ "$$maxTries" -le 0 ]; then
+            echo >&2 'error: unable to contact Postgres after 10 tries'
+            exit 1
+        fi
+        exec /opt/files/startup.sh /opt/bonita/server/bin/catalina.sh run
+  bpm-wrapper:
+    image: ghcr.io/fww-solution/bpm-wrapper:latest
+    restart: always
+    ports:
+      - 8081:8080
+    environment:
+      - DOPPLER_TOKEN=xxx
+    depends_on:
+      - bonita
+      - rabbitmq
+      - db
+  fww-core:
+    image: ghcr.io/fww-solution/fww-core:latest
+    restart: always
+    ports:
+      - 8083:8080
+    environment:
+      - DOPPLER_TOKEN=xxx
+    depends_on:
+      - rabbitmq
+      - db
+      - redis
+  fww-wrapper:
+    image: ghcr.io/fww-solution/fww-wrapper:latest
+    restart: always
+    ports:
+      - 8082:8080
+    environment:
+      - DOPPLER_TOKEN=xxx
+    depends_on:
+      - rabbitmq
+      - redis
+      - fww-core

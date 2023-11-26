@@ -22,7 +22,7 @@ resource "aws_key_pair" "generated_key" {
 }
 
 resource "aws_instance" "microk8s" {
-  ami           = "ami-078c1149d8ad719a7" # Ubuntu 22.04 LTS
+  ami           = "ami-03caf91bb3d81b843" # Ubuntu 22.04 LTS
   instance_type = "t2.medium"
   key_name      = "aws_keys_pairs"
 
