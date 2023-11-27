@@ -26,3 +26,4 @@ terraform.rc
 .terraform.lock.hcl
 
 /data
+.env

@@ -84,7 +84,7 @@ services:
     ports:
       - 8081:8080
     environment:
-      - DOPPLER_TOKEN=dp.st.stg.T1BgzAlUfSfNNbXdHaHUwCH1t7gbKhyP7348SU2naNQ
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN_BPM_WRAPPER}
     depends_on:
       - bonita
       - rabbitmq
@@ -95,7 +95,7 @@ services:
     ports:
       - 8083:8080
     environment:
-      - DOPPLER_TOKEN=dp.st.stg.FuLWNNLGTjaT4U8BfHXzrHCmEFN8RVmTl4qDmetUICX
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_CORE}
     depends_on:
       - rabbitmq
       - db
@@ -106,7 +106,7 @@ services:
     ports:
       - 8082:8080
     environment:
-      - DOPPLER_TOKEN=dp.st.stg.jJ8uA0qx4KOVoL2bl9lQTfwmI2vYlksjhFk41CGdNge
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_WRAPPER}
     depends_on:
       - rabbitmq
       - redis
