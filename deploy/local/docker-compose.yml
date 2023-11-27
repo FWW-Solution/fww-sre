@@ -11,13 +11,13 @@ services:
       - 5432:5432
     volumes:
       - ./data:/var/lib/postgresql/data
-  flyway-migration:
-    image: flyway/flyway
-    command: -url=jdbc:mysql://db -schemas=myschema -user=root -password=P@ssw0rd -connectRetries=60 migrate
-    volumes:
-      - .:/flyway/sql
-    depends_on:
-      - db
+  # flyway-migration:
+  #   image: flyway/flyway
+  #   command: -url=jdbc:mysql://db -schemas=myschema -user=root -password=P@ssw0rd -connectRetries=60 migrate
+  #   volumes:
+  #     - .:/flyway/sql
+  #   depends_on:
+  #     - db
   rabbitmq:
     image: rabbitmq:3.9.10-management
     restart: always
@@ -41,7 +41,7 @@ services:
       - -c
       - max_prepared_transactions=100
   bonita:
-    image: bonita:2023.02
+    image: bonita:2023.2
     hostname: bonita.portal
     ports:
       - 8080:8080
@@ -84,7 +84,7 @@ services:
     ports:
       - 8081:8080
     environment:
-      - DOPPLER_TOKEN=xxx
+      - DOPPLER_TOKEN=dp.st.stg.T1BgzAlUfSfNNbXdHaHUwCH1t7gbKhyP7348SU2naNQ
     depends_on:
       - bonita
       - rabbitmq
@@ -95,7 +95,7 @@ services:
     ports:
       - 8083:8080
     environment:
-      - DOPPLER_TOKEN=xxx
+      - DOPPLER_TOKEN=dp.st.stg.FuLWNNLGTjaT4U8BfHXzrHCmEFN8RVmTl4qDmetUICX
     depends_on:
       - rabbitmq
       - db
@@ -106,7 +106,7 @@ services:
     ports:
       - 8082:8080
     environment:
-      - DOPPLER_TOKEN=xxx
+      - DOPPLER_TOKEN=dp.st.stg.jJ8uA0qx4KOVoL2bl9lQTfwmI2vYlksjhFk41CGdNge
     depends_on:
       - rabbitmq
       - redis
