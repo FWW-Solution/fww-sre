@@ -13,11 +13,28 @@ services:
       - ./data:/var/lib/postgresql/data
   # flyway-migration:
   #   image: flyway/flyway
-  #   command: -url=jdbc:mysql://db -schemas=myschema -user=root -password=P@ssw0rd -connectRetries=60 migrate
+  #   command: -url=jdbc:postgresql://db:5432/postgres -user=postgres -password=postgres -connectRetries=60 migrate
   #   volumes:
   #     - .:/flyway/sql
   #   depends_on:
   #     - db
+  migrate-db:
+    image: migrate/migrate
+    volumes:
+      - ./database/migration:/migrations
+      - ./database/seeder:/sedeers
+    command: -path=/migrations/ -database postgres://postgres:postgres@db:5432/postgres?sslmode=disable up 1
+    links:
+      - db
+    depends_on:
+      - db
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8084:8080
+    depends_on:
+      - db
   rabbitmq:
     image: rabbitmq:3.9.10-management
     restart: always
