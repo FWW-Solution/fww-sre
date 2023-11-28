@@ -1,11 +1,11 @@
 
 deploy-local:
 	@echo "Running tools..."
-	docker compose --env-file .env up -d 
+	sudo docker compose --env-file .env up -d 
 
 remove-deploy-local:
 	@echo "Removing tools..."
-	docker compose --env-file .env down --rmi all
+	sudo docker compose --env-file .env down --rmi all
 
 migrate-run-seed:
 	@echo "Running seed..."

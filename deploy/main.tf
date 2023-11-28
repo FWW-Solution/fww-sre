@@ -28,13 +28,13 @@ resource "aws_key_pair" "generated_key" {
   }
 }
 
-resource "aws_instance" "tools" {
+resource "aws_instance" "deploy-docker" {
   ami           = "ami-078c1149d8ad719a7" # Ubuntu 22.04 LTS
   instance_type = "t2.medium"
   key_name      = "aws_keys_pairs"
 
   vpc_security_group_ids = [
-    aws_security_group.tools.id
+    aws_security_group.deploy-docker.id
   ]
 
   connection {
@@ -53,20 +53,22 @@ resource "aws_instance" "tools" {
       "sudo chmod a+r /etc/apt/keyrings/docker.gpg",
       "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
       "sudo apt-get update",
+      "sudo apt-get install make -y",
       "sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y",
+      "sudo usermod -aG docker ubuntu",
       "git clone https://github.com/FWW-Solution/fww-sre.git"
     ]
   }
 
   tags = {
-    Name  = "tools-instance-cluster-fww"
+    Name  = "deploy-docker-instance-cluster-fww"
     Group = "prodigybe"
   }
 }
 
-resource "aws_security_group" "tools" {
-  name_prefix = "tools-sg-"
-  description = "tools security group"
+resource "aws_security_group" "deploy-docker" {
+  name_prefix = "deploy-docker-sg-"
+  description = "deploy-docker security group"
   ingress {
     from_port   = 22
     to_port     = 22
@@ -94,7 +96,13 @@ resource "aws_security_group" "tools" {
   ingress {
     from_port   = 8080
     to_port     = 8080
-    protocol    = "http"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 8081
+    to_port     = 8081
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
