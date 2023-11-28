@@ -106,6 +106,12 @@ resource "aws_security_group" "deploy-docker" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
+    from_port   = 8084
+    to_port     = 8084
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
     from_port   = 6379
     to_port     = 6379
     protocol    = "tcp"
