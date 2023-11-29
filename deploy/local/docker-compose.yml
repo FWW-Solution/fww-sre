@@ -11,19 +11,20 @@ services:
       - 5432:5432
     volumes:
       - ./data:/var/lib/postgresql/data
-  # flyway-migration:
-  #   image: flyway/flyway
-  #   command: -url=jdbc:postgresql://db:5432/postgres -user=postgres -password=postgres -connectRetries=60 migrate
-  #   volumes:
-  #     - .:/flyway/sql
-  #   depends_on:
-  #     - db
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/data
   migrate-db:
     image: migrate/migrate
     volumes:
       - ./database/migration:/migrations
       - ./database/seeder:/sedeers
-    command: -path=/migrations/ -database postgres://postgres:postgres@db:5432/postgres?sslmode=disable up 1
+    command: /bin/sleep 30 && -path=/migrations/ -database postgres://postgres:postgres@db:5432/postgres?sslmode=disable up 1
     links:
       - db
     depends_on:

@@ -2363,67 +2363,474 @@ VALUES (
         'Bandar Udara Mapenduma',
         'Nduga',
         'Papua Pegunungan',
-        INSERT INTO airports(name, city, province, icao, iata)
-        VALUES 
-            ('Bandar Udara Mararena', 'Sarmi', 'Papua', 'WAJI', 'ZRM'),
-            ('Bandar Udara Marinda', 'Raja Ampat', 'Papua Barat Daya', 'WASN', 'RJM'),
-            ('Bandar Udara Meididga', 'Manokwari', 'Papua Barat', NULL, '–'),
-            ('Bandar Udara Merdey', 'Teluk Bintuni', 'Papua Barat', 'WASM', 'RDE'),
-            ('Bandar Udara Mindiptana', 'Mindiptana, Boven Digoel', 'Papua', 'WAKD', 'MDP'),
-            ('Bandar Udara Misool', 'Raja Ampat', 'Papua Barat Daya', NULL, '–'),
-            ('Bandar Udara Moanamani', 'Dogiyai', 'Papua Tengah', 'WABD', 'ONI'),
-            ('Bandar Udara Molof', 'Keerom', 'Papua', NULL, '–'),
-            ('Bandar Udara Mopah', 'Kota Merauke, Merauke', 'Papua Selatan', 'WAKK', 'MKQ'),
-            ('Bandar Udara Mozes Kilangin', 'Timika', 'Papua Tengah', 'WABP', 'TIM'),
-            ('Bandar Udara Mugi', 'Mugi, Nduga', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Mulia', 'Mulia, Puncak Jaya', 'Papua Tengah', 'WAVA', 'LII'),
-            ('Bandar Udara Ninia', 'Ninia, Yahukimo', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Nop Goliat Dekai', 'Dekai, Yahukimo', 'Papua Pegunungan', 'WAVD', 'DEX'),
-            ('Bandar Udara Okaba', 'Okaba, Merauke', 'Papua Selatan', 'WAKO', 'OKQ'),
-            ('Bandar Udara Okbab', 'Okbab, Pegunungan Bintang', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Oklip', 'Oklip, Pegunungan Bintang', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Oksibil', 'Oksibil', 'Papua Pegunungan', 'WAJO', 'OKL'),
-            ('Bandar Udara Okteneng', 'Okteneng, Okhika, Pegunungan Bintang', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Paro', 'Paro, Nduga', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Pasema', 'Pasema, Yahukimo', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Potowai', 'Mimika', 'Papua Tengah', NULL, '–'),
-            ('Bandar Udara Pulau Gag', NULL, NULL, NULL, 'GAV'),
-            ('Bandar Udara Ransiki', 'Manokwari Selatan', 'Papua Barat', 'WASC', 'RSK'),
-            ('Bandar Udara Rendani', 'Manokwari', 'Papua Barat', 'WASR', 'MKW'),
-            ('Bandar Udara Reni', 'Pulau Reni, Raja Ampat', 'Papua Barat Daya', NULL, '–'),
-            ('Bandar Udara Senggeh', 'Keerom', 'Papua', 'WAJS', 'SHE'),
-            ('Bandar Udara Senggo', 'Senggo, Mappi', 'Papua Selatan', 'WAKQ', 'ZEG'),
-            ('Bandar Udara Sentani', 'Jayapura', 'Papua', 'WAJJ', 'DJJ'),
-            ('Bandar Udara Seralada', 'Seralada, Yahukimo', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Silimo', 'Silimo, Yahukimo', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Sinak', 'Sinak, Puncak', 'Papua Tengah', NULL, 'NKD'),
-            ('Bandar Udara Sobaham', 'Sobaham, Yahukimo', 'Papua Pegunungan', NULL, '–'),
-            ('Bandar Udara Stenkool (Bandar Udara Bintuni)', 'Bintuni', 'Papua Barat', 'WASB', 'NTI'),
-            ('Bandar Udara Stevanus Rumbewas', 'Kosiwo, Kepulauan Yapen', 'Papua', 'WAPO', 'ZRI'),
-            ('Bandar Udara Sudjarwo Tjondronegoro', 'Yapen Selatan, Kepulauan Yapen', 'Papua', 'WAPO', 'ZRI'),
-            ('Bandar Udara Tanah Merah', 'Mandobo, Boven Digoel', 'Papua', 'WAKT', 'TMH'),
-            ('Bandar Udara Teminabuan', 'Sorong Selatan', 'Papua Barat Daya', 'WAST', 'TMX'),
-            ('Bandar Udara Teiraplu', 'Teiraplu, Pegunungan Bintang', 'Papua Pegunungan', NULL, NULL),
-            ('Bandar Udara Tiom', 'Lanny Jaya', 'Papua Pegunungan', 'WABH', 'TMY'),
-            ('Bandar Udara Towe Hitam', 'Towe, Keerom', 'Papua', 'WAJR', 'WAR'),
-            ('Bandar Udara Tsinga', 'Mimika', 'Papua Tengah', NULL, NULL),
-            ('Bandar Udara Utarom', 'Kaimana', 'Papua Barat', 'WASK', 'KNG'),
-            ('Bandar Udara Ubrub', 'Keerom', 'Papua', 'WAJU', 'UBR'),
-            ('Bandar Udara Waghete', 'Deiyai', 'Papua Tengah', 'WABA', 'WET'),
-            ('Bandar Udara Wamena', 'Wamena, Jayawijaya', 'Papua Pegunungan', 'WAVV', 'WMX'),
-            ('Bandar Udara Wanam', 'Merauke', 'Papua Selatan', NULL, NULL),
-            ('Bandar Udara Wangbe', 'Wangbe, Puncak', 'Papua Tengah', NULL, NULL),
-            ('Bandar Udara Wanggemalo', 'Wanggemalo, Boven Digoel', 'Papua', NULL, NULL),
-            ('Bandar Udara Wasior', 'Wasior, Teluk Wondama', 'Papua Barat', 'WASW', 'WSR'),
-            ('Bandar Udara Wasior Baru', 'Wasior, Teluk Wondama', 'Papua Barat', NULL, NULL),
-            ('Bandar Udara Werur', 'Tambrauw', 'Papua Barat Daya', 'WAJY', 'WRR'),
-            ('Bandar Udara Yaniruma', 'Yaniruma, Boven Digoel', 'Papua', NULL, NULL),
-            ('Bandar Udara Yuruf', 'Yuruf, Keerom', 'Papua', NULL, 'RUF'),
-            ('Lapangan Terbang Abmisibil', 'Abmisibil, Okbibab, Pegunungan Bintang', 'Papua Pegunungan', NULL, NULL),
-            ('Lapangan Terbang Anggruk', 'Anggruk, Yahukimo', 'Papua Pegunungan', NULL, NULL),
-            ('Lapangan Terbang Bilai', 'Homeyo, Intan Jaya', 'Papua Tengah', NULL, NULL),
-            ('Lapangan Terbang Bime', 'Bime, Pegunungan Bintang', 'Papua Pegunungan', NULL, NULL),
-            ('Lapangan Terbang Okyop', 'Okyop, Kiwirok Timur, Pegunungan Bintang', 'Papua Pegunungan', NULL, NULL);
+        NULL,
+        'MAP'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Mararena',
+        'Sarmi',
+        'Papua',
+        'WAJI',
+        'ZRM'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Marinda',
+        'Raja Ampat',
+        'Papua Barat Daya',
+        'WASN',
+        'RJM'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Meididga',
+        'Manokwari',
+        'Papua Barat',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Merdey',
+        'Teluk Bintuni',
+        'Papua Barat',
+        'WASM',
+        'RDE'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Mindiptana',
+        'Mindiptana, Boven Digoel',
+        'Papua',
+        'WAKD',
+        'MDP'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Misool',
+        'Raja Ampat',
+        'Papua Barat Daya',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Moanamani',
+        'Dogiyai',
+        'Papua Tengah',
+        'WABD',
+        'ONI'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Molof',
+        'Keerom',
+        'Papua',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Mopah',
+        'Kota Merauke, Merauke',
+        'Papua Selatan',
+        'WAKK',
+        'MKQ'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Mozes Kilangin',
+        'Timika',
+        'Papua Tengah',
+        'WABP',
+        'TIM'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Mugi',
+        'Mugi, Nduga',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Mulia',
+        'Mulia, Puncak Jaya',
+        'Papua Tengah',
+        'WAVA',
+        'LII'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Ninia',
+        'Ninia, Yahukimo',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Nop Goliat Dekai',
+        'Dekai, Yahukimo',
+        'Papua Pegunungan',
+        'WAVD',
+        'DEX'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Okaba',
+        'Okaba, Merauke',
+        'Papua Selatan',
+        'WAKO',
+        'OKQ'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Okbab',
+        'Okbab, Pegunungan Bintang',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Oklip',
+        'Oklip, Pegunungan Bintang',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Oksibil',
+        'Oksibil',
+        'Papua Pegunungan',
+        'WAJO',
+        'OKL'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Okteneng',
+        'Okteneng, Okhika, Pegunungan Bintang',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Paro',
+        'Paro, Nduga',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Pasema',
+        'Pasema, Yahukimo',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Potowai',
+        'Mimika',
+        'Papua Tengah',
+        NULL,
+        '–'
+    );
+;
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Ransiki',
+        'Manokwari Selatan',
+        'Papua Barat',
+        'WASC',
+        'RSK'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Rendani',
+        'Manokwari',
+        'Papua Barat',
+        'WASR',
+        'MKW'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Reni',
+        'Pulau Reni, Raja Ampat',
+        'Papua Barat Daya',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Senggeh',
+        'Keerom',
+        'Papua',
+        'WAJS',
+        'SHE'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Senggo',
+        'Senggo, Mappi',
+        'Papua Selatan',
+        'WAKQ',
+        'ZEG'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Sentani',
+        'Jayapura',
+        'Papua',
+        'WAJJ',
+        'DJJ'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Seralada',
+        'Seralada, Yahukimo',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Silimo',
+        'Silimo, Yahukimo',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Sinak',
+        'Sinak, Puncak',
+        'Papua Tengah',
+        NULL,
+        'NKD'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Sobaham',
+        'Sobaham, Yahukimo',
+        'Papua Pegunungan',
+        NULL,
+        '–'
+    )
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Stenkool (Bandar Udara Bintuni)',
+        'Bintuni',
+        'Papua Barat',
+        'WASB',
+        'NTI'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Stevanus Rumbewas',
+        'Kosiwo, Kepulauan Yapen',
+        'Papua',
+        'WAPO',
+        'ZRI'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Sudjarwo Tjondronegoro',
+        'Yapen Selatan, Kepulauan Yapen',
+        'Papua',
+        'WAPO',
+        'ZRI'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Tanah Merah',
+        'Mandobo, Boven Digoel',
+        'Papua',
+        'WAKT',
+        'TMH'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Teminabuan',
+        'Sorong Selatan',
+        'Papua Barat Daya',
+        'WAST',
+        'TMX'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Teiraplu',
+        'Teiraplu, Pegunungan Bintang',
+        'Papua Pegunungan',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Tiom',
+        'Lanny Jaya',
+        'Papua Pegunungan',
+        'WABH',
+        'TMY'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Towe Hitam',
+        'Towe, Keerom',
+        'Papua',
+        'WAJR',
+        'WAR'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Tsinga',
+        'Mimika',
+        'Papua Tengah',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Utarom',
+        'Kaimana',
+        'Papua Barat',
+        'WASK',
+        'KNG'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Ubrub',
+        'Keerom',
+        'Papua',
+        'WAJU',
+        'UBR'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Waghete',
+        'Deiyai',
+        'Papua Tengah',
+        'WABA',
+        'WET'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Wamena',
+        'Wamena, Jayawijaya',
+        'Papua Pegunungan',
+        'WAVV',
+        'WMX'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Wanam',
+        'Merauke',
+        'Papua Selatan',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Wangbe',
+        'Wangbe, Puncak',
+        'Papua Tengah',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Wanggemalo',
+        'Wanggemalo, Boven Digoel',
+        'Papua',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Wasior',
+        'Wasior, Teluk Wondama',
+        'Papua Barat',
+        'WASW',
+        'WSR'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Wasior Baru',
+        'Wasior, Teluk Wondama',
+        'Papua Barat',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Werur',
+        'Tambrauw',
+        'Papua Barat Daya',
+        'WAJY',
+        'WRR'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Yaniruma',
+        'Yaniruma, Boven Digoel',
+        'Papua',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Bandar Udara Yuruf',
+        'Yuruf, Keerom',
+        'Papua',
+        NULL,
+        'RUF'
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Lapangan Terbang Abmisibil',
+        'Abmisibil, Okbibab, Pegunungan Bintang',
+        'Papua Pegunungan',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Lapangan Terbang Anggruk',
+        'Anggruk, Yahukimo',
+        'Papua Pegunungan',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Lapangan Terbang Bilai',
+        'Homeyo, Intan Jaya',
+        'Papua Tengah',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Lapangan Terbang Bime',
+        'Bime, Pegunungan Bintang',
+        'Papua Pegunungan',
+        NULL,
+        NULL
+    );
+INSERT INTO airports(name, city, province, icao, iata)
+VALUES (
+        'Lapangan Terbang Okyop',
+        'Okyop, Kiwirok Timur, Pegunungan Bintang',
+        'Papua Pegunungan',
+        NULL,
+        NULL
+    );
 INSERT INTO flights (
         code_flight,
         departure_time,

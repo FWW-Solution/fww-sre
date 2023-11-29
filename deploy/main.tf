@@ -2,7 +2,7 @@ provider "aws" {
   region = "ap-southeast-1" # Singapore region
 }
 
-resource "tls_private_key" "terrafrom_generated_private_key" {
+resource "tls_private_key" "terrafrom_generated_private_key_deploy_docker" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
@@ -10,19 +10,19 @@ resource "tls_private_key" "terrafrom_generated_private_key" {
 resource "aws_key_pair" "generated_key" {
   key_name = "aws_keys_pairs"
   # Public Key: The public will be generated using the reference of tls_private_key.terrafrom_generated_private_key
-  public_key = tls_private_key.terrafrom_generated_private_key.public_key_openssh
+  public_key = tls_private_key.terrafrom_generated_private_key_deploy_docker.public_key_openssh
 
   # Print private key pem
   provisioner "local-exec" {
     command = <<-EOT
-       echo '${tls_private_key.terrafrom_generated_private_key.private_key_pem}'
+       echo '${tls_private_key.terrafrom_generated_private_key_deploy_docker.private_key_pem}'
      EOT
   }
 
   # Store private key :  Generate and save private key(aws_keys_pairs.pem) in current directory
   provisioner "local-exec" {
     command = <<-EOT
-      echo '${tls_private_key.terrafrom_generated_private_key.private_key_pem}' > aws_keys_pairs.pem
+      echo '${tls_private_key.terrafrom_generated_private_key_deploy_docker.private_key_pem}' > aws_keys_pairs.pem
        chmod 400 aws_keys_pairs.pem
      EOT
   }
@@ -98,18 +98,28 @@ resource "aws_security_group" "deploy-docker" {
     to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Bonita"
   }
   ingress {
-    from_port   = 8081
-    to_port     = 8081
+    from_port   = 8082
+    to_port     = 8082
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Service"
   }
   ingress {
     from_port   = 8084
     to_port     = 8084
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Adminer"
+  }
+  ingress {
+    from_port   = 8086
+    to_port     = 8086
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Portainer"
   }
   ingress {
     from_port   = 6379
