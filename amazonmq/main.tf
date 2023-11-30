@@ -18,4 +18,6 @@ resource "aws_mq_broker" "rabbitmq_broker" {
   }
 }
 
-# END: Amazon MQ Configuration
+output "aws_mq_broker_rabbitmq_broker" {
+  value = aws_mq_broker.rabbitmq_broker.endpoint
+}

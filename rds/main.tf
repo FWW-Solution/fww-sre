@@ -17,3 +17,7 @@ resource "aws_db_instance" "fww-db" {
     Group = "prodigybe"
   }
 }
+
+output "aws_db_instance_fww-db" {
+  value = aws_db_instance.fww-db.endpoint
+}
