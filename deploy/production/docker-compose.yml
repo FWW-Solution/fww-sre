@@ -24,8 +24,7 @@ services:
     volumes:
       - ./database/migration:/migrations
       - ./database/seeder:/sedeers
-    command: /bin/sleep 30 && -path=/migrations/ -database 
-    ${MIGRATE_DB_DSN} up 1
+    command: /bin/sleep 30 && -path=/migrations/ -database ${MIGRATE_DB_DSN} up 1
     links:
       - db
     depends_on:

@@ -7,23 +7,16 @@ resource "tls_private_key" "terrafrom_generated_private_key_deploy_docker" {
   rsa_bits  = 4096
 }
 
-resource "aws_key_pair" "generated_key" {
-  key_name = "aws_keys_pairs"
+resource "aws_key_pair" "generated_key_docker_production" {
+  key_name = "aws_keys_pairs_prod"
   # Public Key: The public will be generated using the reference of tls_private_key.terrafrom_generated_private_key
   public_key = tls_private_key.terrafrom_generated_private_key_deploy_docker.public_key_openssh
 
-  # Print private key pem
+  # Store private key :  Generate and save private key(aws_keys_pairs_prod.pem) in current directory
   provisioner "local-exec" {
     command = <<-EOT
-       echo '${tls_private_key.terrafrom_generated_private_key_deploy_docker.private_key_pem}'
-     EOT
-  }
-
-  # Store private key :  Generate and save private key(aws_keys_pairs.pem) in current directory
-  provisioner "local-exec" {
-    command = <<-EOT
-      echo '${tls_private_key.terrafrom_generated_private_key_deploy_docker.private_key_pem}' > aws_keys_pairs.pem
-       chmod 400 aws_keys_pairs.pem
+      echo '${tls_private_key.terrafrom_generated_private_key_deploy_docker.private_key_pem}' > aws_keys_pairs_prod.pem
+       chmod 400 aws_keys_pairs_prod.pem
      EOT
   }
 }
@@ -31,7 +24,7 @@ resource "aws_key_pair" "generated_key" {
 resource "aws_instance" "deploy-docker" {
   ami           = "ami-078c1149d8ad719a7" # Ubuntu 22.04 LTS
   instance_type = "t2.medium"
-  key_name      = "aws_keys_pairs"
+  key_name      = "aws_keys_pairs_prod"
 
   vpc_security_group_ids = [
     aws_security_group.deploy-docker.id
@@ -41,18 +34,9 @@ resource "aws_instance" "deploy-docker" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file("aws_keys_pairs.pem")
+    private_key = file("aws_keys_pairs_prod.pem")
     host        = self.public_ip
     timeout     = "4m"
-  }
-  provisioner "file" {
-    source      = "./docker-compose.yml"
-    destination = "/home/ubuntu/docker-compose.yml"
-
-  }
-  provisioner "file" {
-    source      = "./makefile"
-    destination = "/home/ubuntu/makefile"
   }
   provisioner "remote-exec" {
     inline = [
