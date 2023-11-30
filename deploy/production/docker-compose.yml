@@ -89,7 +89,6 @@ services:
       - DOPPLER_TOKEN=${DOPPLER_TOKEN_BPM_WRAPPER}
     depends_on:
       - bonita
-      - rabbitmq
       - db
   fww-core:
     image: ghcr.io/fww-solution/fww-core:latest
@@ -99,8 +98,6 @@ services:
     environment:
       - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_CORE}
     depends_on:
-      - rabbitmq
-      - db
       - redis
   fww-wrapper:
     image: ghcr.io/fww-solution/fww-wrapper:latest
@@ -110,6 +107,5 @@ services:
     environment:
       - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_WRAPPER}
     depends_on:
-      - rabbitmq
       - redis
       - fww-core
