@@ -66,7 +66,7 @@ services:
       - ${GRAFANA_VOLUME}:/var/lib/grafana
       - ./grafana/provisioning/:/etc/grafana/provisioning/
     ports:
-      - 3000:3000
+      - 8084:3000
     environment:
       GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: 'true'
       GF_INSTALL_PLUGINS: grafana-piechart-panel
