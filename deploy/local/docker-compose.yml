@@ -79,7 +79,7 @@ services:
       GF_AUTH_PROXY_ENABLED: 'true'
       GF_USERS_ALLOW_SIGN_UP: false
     labels:
-      - 'traefik.http.routers.grafana.rule=Host(`${GRAFANA_URL}`)'
+      # - 'traefik.http.routers.grafana.rule=Host(`${GRAFANA_URL}`)'
       - 'traefik.http.routers.grafana.service=grafana'
       # - "traefik.http.routers.grafana.middlewares=traefik-auth"
       - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
@@ -103,7 +103,7 @@ services:
     image: portainer/portainer-ce:latest
     restart: always
     ports:
-      - 9000:9000
+      - 8086:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data:/data
@@ -219,7 +219,7 @@ services:
     image: ghcr.io/fww-solution/fww-wrapper:latest
     restart: always
     labels:
-      - 'traefik.http.routers.fww-wrapper.rule=Path(`/gateway`)'
+      - 'traefik.http.routers.fww-wrapper.rule=Path(`/`)'
       - 'traefik.http.routers.fww-wrapper.service=fww-wrapper'
       - 'traefik.http.services.fww-wrapper.loadbalancer.server.port=8080'
     expose:
