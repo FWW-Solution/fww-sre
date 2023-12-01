@@ -102,13 +102,8 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     restart: always
-    labels:
-      - 'traefik.http.routers.portainer.rule=Path(`/portainer`)'
-      - 'traefik.http.routers.portainer.service=portainer'
-      # - "traefik.http.routers.portainer.middlewares=traefik-auth"
-      - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
-    # ports:
-    #   - 8086:9000
+    ports:
+      - 8086:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data:/data
@@ -125,13 +120,8 @@ services:
   adminer:
     image: adminer
     restart: always
-    expose:
-      - 8080
-    labels:
-      - 'traefik.http.routers.adminer.rule=Path(`/adminer`)'
-      - 'traefik.http.routers.adminer.service=adminer'
-      # - "traefik.http.routers.adminer.middlewares=traefik-auth"
-      - 'traefik.http.services.adminer.loadbalancer.server.port=8080'
+    ports:
+      - 6443:8080
     depends_on:
       - db
   rabbitmq:
@@ -159,12 +149,8 @@ services:
   bonita:
     image: bonita:2023.2
     hostname: bonita.portal
-    # ports:
-    #   - 8082:8080
-    labels:
-      - 'traefik.http.routers.bonita.rule=Path(`/bpm`)'
-      - 'traefik.http.routers.bonita.service=bonita'
-      - 'traefik.http.services.bonita.loadbalancer.server.port=8080'
+    ports:
+      - 8082:8080
     environment:
       - DB_VENDOR=postgres
       - DB_HOST=db-bonita
@@ -224,7 +210,7 @@ services:
     image: ghcr.io/fww-solution/fww-wrapper:latest
     restart: always
     labels:
-      - 'traefik.http.routers.fww-wrapper.rule=Path(`/wrapper`)'
+      - 'traefik.http.routers.fww-wrapper.rule=Path(`/`)'
       - 'traefik.http.routers.fww-wrapper.service=fww-wrapper'
       - 'traefik.http.services.fww-wrapper.loadbalancer.server.port=8080'
     expose:
