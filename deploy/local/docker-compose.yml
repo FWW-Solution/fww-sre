@@ -98,7 +98,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ./postgres:/var/lib/postgresql/data
   portainer:
     image: portainer/portainer-ce:latest
     restart: always
@@ -106,13 +106,13 @@ services:
       - 8086:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/data
+      - ./portainer:/data
   migrate-db:
     image: migrate/migrate
     volumes:
       - ./database/migration:/migrations
       - ./database/seeder:/sedeers
-    command: /bin/sleep 30 && -path=/migrations/ -database postgres://postgres:postgres@db:5432/postgres?sslmode=disable up 1
+    command: -path=/migrations/ -database postgres://postgres:postgres@db:5432/postgres?sslmode=disable up 1
     links:
       - db
     depends_on:
@@ -184,42 +184,42 @@ services:
             exit 1
         fi
         exec /opt/files/startup.sh /opt/bonita/server/bin/catalina.sh run
-  bpm-wrapper:
-    image: ghcr.io/fww-solution/bpm-wrapper:latest
-    restart: always
-    expose:
-      - 8080
-    environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN_BPM_WRAPPER}
-    depends_on:
-      - bonita
-      - rabbitmq
-      - db
-  fww-core:
-    image: ghcr.io/fww-solution/fww-core:latest
-    restart: always
-    ports:
-      - 8083:8080
-    environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_CORE}
-    depends_on:
-      - rabbitmq
-      - db
-      - redis
-  fww-wrapper:
-    image: ghcr.io/fww-solution/fww-wrapper:latest
-    restart: always
-    labels:
-      - 'traefik.http.routers.fww-wrapper.rule=Path(`/`)'
-      - 'traefik.http.routers.fww-wrapper.service=fww-wrapper'
-      - 'traefik.http.services.fww-wrapper.loadbalancer.server.port=8080'
-    expose:
-      - 8080
-    # ports:
-    #   - 8082:8080
-    environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_WRAPPER}
-    depends_on:
-      - rabbitmq
-      - redis
-      - fww-core
+  # bpm-wrapper:
+  #   image: ghcr.io/fww-solution/bpm-wrapper:latest
+  #   restart: always
+  #   expose:
+  #     - 8080
+  #   environment:
+  #     - DOPPLER_TOKEN=${DOPPLER_TOKEN_BPM_WRAPPER}
+  #   depends_on:
+  #     - bonita
+  #     - rabbitmq
+  #     - db
+  # fww-core:
+  #   image: ghcr.io/fww-solution/fww-core:latest
+  #   restart: always
+  #   ports:
+  #     - 8083:8080
+  #   environment:
+  #     - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_CORE}
+  #   depends_on:
+  #     - rabbitmq
+  #     - db
+  #     - redis
+  # fww-wrapper:
+  #   image: ghcr.io/fww-solution/fww-wrapper:latest
+  #   restart: always
+  #   labels:
+  #     - 'traefik.http.routers.fww-wrapper.rule=Path(`/`)'
+  #     - 'traefik.http.routers.fww-wrapper.service=fww-wrapper'
+  #     - 'traefik.http.services.fww-wrapper.loadbalancer.server.port=8080'
+  #   expose:
+  #     - 8080
+  #   # ports:
+  #   #   - 8082:8080
+  #   environment:
+  #     - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_WRAPPER}
+  #   depends_on:
+  #     - rabbitmq
+  #     - redis
+  #     - fww-core
