@@ -56,7 +56,9 @@ resource "aws_instance" "deploy-docker" {
       "sudo apt-get install make -y",
       "sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y",
       "sudo usermod -aG docker ubuntu",
-      "git clone https://github.com/FWW-Solution/fww-sre.git"
+      "git clone https://github.com/fww-solution/fww-sre.git",
+      "cd fww-sre/deploy",
+      "sudo chmod -R 777 local/"
     ]
   }
 
@@ -80,6 +82,7 @@ resource "aws_security_group" "deploy-docker" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Service Traefik"
   }
   ingress {
     from_port   = 443
@@ -98,21 +101,21 @@ resource "aws_security_group" "deploy-docker" {
     to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "Bonita"
+    description = "Dashboard Traefik"
   }
   ingress {
     from_port   = 8082
     to_port     = 8082
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "Service"
+    description = "Bonita"
   }
   ingress {
     from_port   = 8084
     to_port     = 8084
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "Adminer"
+    description = "Grafana"
   }
   ingress {
     from_port   = 8086
