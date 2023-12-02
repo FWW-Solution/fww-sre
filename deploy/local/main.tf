@@ -95,6 +95,7 @@ resource "aws_security_group" "deploy-docker-stagging" {
     to_port     = 6443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Adminer"
   }
   ingress {
     from_port   = 8080
@@ -140,37 +141,4 @@ resource "aws_security_group" "deploy-docker-stagging" {
   tags = {
     "Group" = "prodigybe"
   }
-}
-
-
-resource "aws_apigatewayv2_api" "api-gateway-fww-solution" {
-  name          = "api-gateway-fww-solution"
-  protocol_type = "HTTP"
-}
-
-resource "aws_apigatewayv2_stage" "stagging" {
-  api_id = aws_apigatewayv2_api.api-gateway-fww-solution.id
-
-  name        = "stagging"
-  auto_deploy = true
-}
-
-resource "aws_apigatewayv2_integration" "api-gateway-fww-solution" {
-  api_id = aws_apigatewayv2_api.api-gateway-fww-solution.id
-
-  integration_type   = "HTTP_PROXY"
-  integration_uri    = "http://${aws_instance.deploy-docker-stagging.public_ip}:8082/{proxy}"
-  integration_method = "ANY"
-  connection_type    = "INTERNET"
-}
-
-resource "aws_apigatewayv2_route" "api-gateway-fww-solution" {
-  api_id = aws_apigatewayv2_api.api-gateway-fww-solution.id
-
-  route_key = "ANY /{proxy+}"
-  target    = "integrations/${aws_apigatewayv2_integration.api-gateway-fww-solution.id}"
-}
-
-output "api_gw_example_1_health_url" {
-  value = "${aws_apigatewayv2_stage.stagging.invoke_url}/"
 }
