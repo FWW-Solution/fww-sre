@@ -1,5 +1,93 @@
 version: '3.7'
 services:
+  # Reverse Proxy, Dashboard and monitoring
+  traefik:
+    image: traefik:v2.5.4
+    command:
+      - '--api.insecure=true'
+      - '--log.level=DEBUG'
+      - '--api.dashboard=true'
+      - '--metrics.prometheus=true'
+      - '--metrics.prometheus.buckets=0.1,0.3,1.2,5.0'
+      - '--providers.docker=true'
+      - '--providers.docker.watch'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+      - 8080:8080
+    labels:
+      # - "traefik.http.routers.traefik-ui.rule=Host(`${TRAEFIK_URL}`)"
+      - 'traefik.http.routers.traefik-ui.service=api@internal'
+      # - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
+      # - "traefik.http.middlewares.traefik-auth.basicauth.removeheader=true"
+      # - "traefik.http.routers.traefik-ui.middlewares=traefik-auth"xw
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+  whoami:
+    image: traefik/whoami
+    labels:
+      - 'traefik.http.routers.whoami.rule=Path(`/whoami`)'
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - ${PROM_VOLUME}:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.size=256MB'
+    labels:
+      - 'traefik.http.routers.prometheus.rule=Host(`${PROM_URL}`)'
+      - 'traefik.http.routers.prometheus.service=prometheus'
+      # - "traefik.http.routers.prometheus.middlewares=traefik-auth"
+      - 'traefik.http.services.prometheus.loadbalancer.server.port=9090'
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    volumes:
+      - ${GRAFANA_VOLUME}:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    ports:
+      - 8084:3000
+    environment:
+      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: 'true'
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+      GF_AUTH_DISABLE_LOGIN_FORM: 'true'
+      GF_AUTH_ANONYMOUS_ENABLED: 'true'
+      GF_AUTH_ANONYMOUS_ORG_NAME: 'Main Org.'
+      GF_AUTH_ANONYMOUS_ORG_ROLE: 'Admin'
+      GF_AUTH_BASIC_ENABLED: 'false'
+      GF_AUTH_DISABLE_SIGNOUT_MENU: 'true'
+      GF_AUTH_PROXY_ENABLED: 'true'
+      GF_USERS_ALLOW_SIGN_UP: false
+    labels:
+      # - 'traefik.http.routers.grafana.rule=Host(`${GRAFANA_URL}`)'
+      - 'traefik.http.routers.grafana.service=grafana'
+      # - "traefik.http.routers.grafana.middlewares=traefik-auth"
+      - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
   db:
     image: postgres:14.7
     restart: always
@@ -10,21 +98,21 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ./postgres:/var/lib/postgresql/data
   portainer:
     image: portainer/portainer-ce:latest
     restart: always
     ports:
-      - 9000:9000
+      - 8086:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/data
+      - ./portainer:/data
   migrate-db:
     image: migrate/migrate
     volumes:
       - ./database/migration:/migrations
       - ./database/seeder:/sedeers
-    command: /bin/sleep 30 && -path=/migrations/ -database postgres://postgres:postgres@db:5432/postgres?sslmode=disable up 1
+    command: -path=/migrations/ -database postgres://postgres:postgres@db:5432/postgres?sslmode=disable up 1
     links:
       - db
     depends_on:
@@ -33,7 +121,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8084:8080
+      - 6443:8080
     depends_on:
       - db
   rabbitmq:
@@ -48,8 +136,8 @@ services:
   redis:
     image: redis:6.2.6
     restart: always
-    ports:
-      - 6379:6379
+    expose:
+      - 6379
   db-bonita:
     image: bonitasoft/bonita-postgres:12.6
     environment:
@@ -62,7 +150,7 @@ services:
     image: bonita:2023.2
     hostname: bonita.portal
     ports:
-      - 8080:8080
+      - 8082:8080
     environment:
       - DB_VENDOR=postgres
       - DB_HOST=db-bonita
@@ -96,36 +184,42 @@ services:
             exit 1
         fi
         exec /opt/files/startup.sh /opt/bonita/server/bin/catalina.sh run
-  bpm-wrapper:
-    image: ghcr.io/fww-solution/bpm-wrapper:latest
-    restart: always
-    ports:
-      - 8081:8080
-    environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN_BPM_WRAPPER}
-    depends_on:
-      - bonita
-      - rabbitmq
-      - db
-  fww-core:
-    image: ghcr.io/fww-solution/fww-core:latest
-    restart: always
-    ports:
-      - 8083:8080
-    environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_CORE}
-    depends_on:
-      - rabbitmq
-      - db
-      - redis
-  fww-wrapper:
-    image: ghcr.io/fww-solution/fww-wrapper:latest
-    restart: always
-    ports:
-      - 8082:8080
-    environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_WRAPPER}
-    depends_on:
-      - rabbitmq
-      - redis
-      - fww-core
+  # bpm-wrapper:
+  #   image: ghcr.io/fww-solution/bpm-wrapper:latest
+  #   restart: always
+  #   expose:
+  #     - 8080
+  #   environment:
+  #     - DOPPLER_TOKEN=${DOPPLER_TOKEN_BPM_WRAPPER}
+  #   depends_on:
+  #     - bonita
+  #     - rabbitmq
+  #     - db
+  # fww-core:
+  #   image: ghcr.io/fww-solution/fww-core:latest
+  #   restart: always
+  #   ports:
+  #     - 8083:8080
+  #   environment:
+  #     - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_CORE}
+  #   depends_on:
+  #     - rabbitmq
+  #     - db
+  #     - redis
+  # fww-wrapper:
+  #   image: ghcr.io/fww-solution/fww-wrapper:latest
+  #   restart: always
+  #   labels:
+  #     - 'traefik.http.routers.fww-wrapper.rule=Path(`/`)'
+  #     - 'traefik.http.routers.fww-wrapper.service=fww-wrapper'
+  #     - 'traefik.http.services.fww-wrapper.loadbalancer.server.port=8080'
+  #   expose:
+  #     - 8080
+  #   # ports:
+  #   #   - 8082:8080
+  #   environment:
+  #     - DOPPLER_TOKEN=${DOPPLER_TOKEN_FWW_WRAPPER}
+  #   depends_on:
+  #     - rabbitmq
+  #     - redis
+  #     - fww-core

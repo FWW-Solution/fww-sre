@@ -26,4 +26,8 @@ terraform.rc
 .terraform.lock.hcl
 
 /data
+/portainer
+/postgres
+/dev-grafana-data
+/dev-prom-data
 .env
