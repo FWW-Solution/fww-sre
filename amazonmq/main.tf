@@ -19,5 +19,5 @@ resource "aws_mq_broker" "rabbitmq_broker" {
 }
 
 output "aws_mq_broker_rabbitmq_broker" {
-  value = aws_mq_broker.rabbitmq_broker.endpoint
+  value = aws_mq_broker.rabbitmq_broker.instances[0].endpoints
 }

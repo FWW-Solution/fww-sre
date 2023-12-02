@@ -7,8 +7,8 @@ resource "tls_private_key" "terrafrom_generated_private_key" {
   rsa_bits  = 4096
 }
 
-resource "aws_key_pair" "generated_key" {
-  key_name = "aws_keys_pairs"
+resource "aws_key_pair" "generated_key_docker_stagging" {
+  key_name = "aws_keys_pairs_stagging"
   # Public Key: The public will be generated using the reference of tls_private_key.terrafrom_generated_private_key
   public_key = tls_private_key.terrafrom_generated_private_key.public_key_openssh
 
@@ -22,25 +22,25 @@ resource "aws_key_pair" "generated_key" {
   # Store private key :  Generate and save private key(aws_keys_pairs.pem) in current directory
   provisioner "local-exec" {
     command = <<-EOT
-      echo '${tls_private_key.terrafrom_generated_private_key.private_key_pem}' > aws_keys_pairs.pem
-       chmod 400 aws_keys_pairs.pem
+      echo '${tls_private_key.terrafrom_generated_private_key.private_key_pem}' > aws_keys_pairs_stagging.pem
+       chmod 400 aws_keys_pairs_stagging.pem
      EOT
   }
 }
 
-resource "aws_instance" "deploy-docker" {
+resource "aws_instance" "deploy-docker-stagging" {
   ami           = "ami-078c1149d8ad719a7" # Ubuntu 22.04 LTS
   instance_type = "t2.medium"
-  key_name      = "aws_keys_pairs"
+  key_name      = "aws_keys_pairs_stagging"
 
   vpc_security_group_ids = [
-    aws_security_group.deploy-docker.id
+    aws_security_group.deploy-docker-stagging.id
   ]
 
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file("aws_keys_pairs.pem")
+    private_key = file("aws_keys_pairs_stagging.pem")
     host        = self.public_ip
     timeout     = "4m"
   }
@@ -61,12 +61,12 @@ resource "aws_instance" "deploy-docker" {
   }
 
   tags = {
-    Name  = "deploy-docker-instance-cluster-fww"
+    Name  = "deploy-docker-instance-cluster-fww-stagging"
     Group = "prodigybe"
   }
 }
 
-resource "aws_security_group" "deploy-docker" {
+resource "aws_security_group" "deploy-docker-stagging" {
   name_prefix = "deploy-docker-sg-"
   description = "deploy-docker security group"
   ingress {
@@ -137,4 +137,37 @@ resource "aws_security_group" "deploy-docker" {
   tags = {
     "Group" = "prodigybe"
   }
+}
+
+
+resource "aws_apigatewayv2_api" "api-gateway-fww-solution" {
+  name          = "api-gateway-fww-solution"
+  protocol_type = "HTTP"
+}
+
+resource "aws_apigatewayv2_stage" "stagging" {
+  api_id = aws_apigatewayv2_api.api-gateway-fww-solution.id
+
+  name        = "stagging"
+  auto_deploy = true
+}
+
+resource "aws_apigatewayv2_integration" "api-gateway-fww-solution" {
+  api_id = aws_apigatewayv2_api.api-gateway-fww-solution.id
+
+  integration_type   = "HTTP_PROXY"
+  integration_uri    = "http://${aws_instance.deploy-docker-stagging.public_ip}:8082/{proxy}"
+  integration_method = "ANY"
+  connection_type    = "INTERNET"
+}
+
+resource "aws_apigatewayv2_route" "api-gateway-fww-solution" {
+  api_id = aws_apigatewayv2_api.api-gateway-fww-solution.id
+
+  route_key = "ANY /{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.api-gateway-fww-solution.id}"
+}
+
+output "api_gw_example_1_health_url" {
+  value = "${aws_apigatewayv2_stage.stagging.invoke_url}/"
 }

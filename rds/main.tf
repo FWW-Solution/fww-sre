@@ -7,7 +7,7 @@ resource "aws_db_instance" "fww-db" {
   engine              = "postgres"
   engine_version      = "14.7"
   db_name             = "fww_core"
-  instance_class      = "db.t3.micro"
+  instance_class      = "db.t3.small"
   username            = "fwwdev"
   password            = "u5Mb2pbiUpqh3VA"
   skip_final_snapshot = true
