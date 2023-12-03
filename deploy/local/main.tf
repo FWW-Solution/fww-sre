@@ -98,6 +98,20 @@ resource "aws_security_group" "deploy-docker-stagging" {
     description = "Adminer"
   }
   ingress {
+    from_port   = 5051
+    to_port     = 5051
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Kibana"
+  }
+  ingress {
+    from_port   = 9200
+    to_port     = 9200
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Elasticsearch"
+  }
+  ingress {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"

@@ -209,7 +209,6 @@ services:
       retries: 80
     ports:
       - 9200:9200
-
   kibana:
     labels:
       co.elastic.logs/enabled: false
