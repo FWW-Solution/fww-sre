@@ -12,13 +12,6 @@ resource "aws_key_pair" "generated_key_docker_stagging" {
   # Public Key: The public will be generated using the reference of tls_private_key.terrafrom_generated_private_key
   public_key = tls_private_key.terrafrom_generated_private_key.public_key_openssh
 
-  # Print private key pem
-  provisioner "local-exec" {
-    command = <<-EOT
-       echo '${tls_private_key.terrafrom_generated_private_key.private_key_pem}'
-     EOT
-  }
-
   # Store private key :  Generate and save private key(aws_keys_pairs.pem) in current directory
   provisioner "local-exec" {
     command = <<-EOT
@@ -32,6 +25,12 @@ resource "aws_instance" "deploy-docker-stagging" {
   ami           = "ami-078c1149d8ad719a7" # Ubuntu 22.04 LTS
   instance_type = "t2.medium"
   key_name      = "aws_keys_pairs_stagging"
+
+  ebs_block_device {
+    device_name = "/dev/sda1"
+    volume_size = 30
+    volume_type = "gp2"
+  }
 
   vpc_security_group_ids = [
     aws_security_group.deploy-docker-stagging.id

@@ -186,43 +186,43 @@ services:
             exit 1
         fi
         exec /opt/files/startup.sh /opt/bonita/server/bin/catalina.sh run
-  filebeat:
-    labels:
-      co.elastic.logs/enabled: false
-    user: root
-    image: docker.elastic.co/beats/filebeat:7.14.0
-    command: filebeat -e -strict.perms=false
-    volumes:
-      - ./filebeat.docker.yml:/usr/share/filebeat/filebeat.yml
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  elasticsearch:
-    labels:
-      co.elastic.logs/enabled: false
-    environment:
-      - discovery.type=single-node
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
-    healthcheck:
-      test: ['CMD', 'curl', '-s', '-f', 'http://localhost:9200/_cat/health']
-      interval: 3s
-      timeout: 3s
-      retries: 80
-    ports:
-      - 9200:9200
-  kibana:
-    labels:
-      co.elastic.logs/enabled: false
-    image: docker.elastic.co/kibana/kibana:7.14.0
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    healthcheck:
-      test: ['CMD', 'curl', '-s', '-f', 'http://localhost:5601/api/status']
-      interval: 3s
-      timeout: 3s
-      retries: 80
-    ports:
-      - 5601:5601
+  # filebeat:
+  #   labels:
+  #     co.elastic.logs/enabled: false
+  #   user: root
+  #   image: docker.elastic.co/beats/filebeat:7.14.0
+  #   command: filebeat -e -strict.perms=false
+  #   volumes:
+  #     - ./filebeat.docker.yml:/usr/share/filebeat/filebeat.yml
+  #     - /var/lib/docker/containers:/var/lib/docker/containers:ro
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  # elasticsearch:
+  #   labels:
+  #     co.elastic.logs/enabled: false
+  #   environment:
+  #     - discovery.type=single-node
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+  #   healthcheck:
+  #     test: ['CMD', 'curl', '-s', '-f', 'http://localhost:9200/_cat/health']
+  #     interval: 3s
+  #     timeout: 3s
+  #     retries: 80
+  #   ports:
+  #     - 9200:9200
+  # kibana:
+  #   labels:
+  #     co.elastic.logs/enabled: false
+  #   image: docker.elastic.co/kibana/kibana:7.14.0
+  #   depends_on:
+  #     elasticsearch:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ['CMD', 'curl', '-s', '-f', 'http://localhost:5601/api/status']
+  #     interval: 3s
+  #     timeout: 3s
+  #     retries: 80
+  #   ports:
+  #     - 5601:5601
   bpm-wrapper:
     image: ghcr.io/fww-solution/bpm-wrapper:latest
     restart: always
@@ -249,7 +249,7 @@ services:
     image: ghcr.io/fww-solution/fww-wrapper:latest
     restart: always
     labels:
-      - 'traefik.http.routers.fww-wrapper.rule=Path(`/`)'
+      - 'traefik.http.routers.fww-wrapper.rule=Host("app.wrapper")'
       - 'traefik.http.routers.fww-wrapper.service=fww-wrapper'
       - 'traefik.http.services.fww-wrapper.loadbalancer.server.port=8080'
     expose:
