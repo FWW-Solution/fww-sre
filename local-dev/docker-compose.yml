@@ -19,6 +19,17 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  migrate-db:
+    image: migrate/migrate
+    volumes:
+      - ./database/migration:/migrations
+      - ./database/seeder:/sedeers
+    command: -path=/migrations/ -database postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable up 1
+    links:
+      - postgres
+    depends_on:
+      - postgres
+
   rabbitmq:
     image: rabbitmq:latest
     ports:

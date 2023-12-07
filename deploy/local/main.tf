@@ -23,7 +23,7 @@ resource "aws_key_pair" "generated_key_docker_stagging" {
 
 resource "aws_instance" "deploy-docker-stagging" {
   ami           = "ami-078c1149d8ad719a7" # Ubuntu 22.04 LTS
-  instance_type = "t2.medium"
+  instance_type = "t2.large"
   key_name      = "aws_keys_pairs_stagging"
 
   ebs_block_device {
@@ -97,8 +97,8 @@ resource "aws_security_group" "deploy-docker-stagging" {
     description = "Adminer"
   }
   ingress {
-    from_port   = 5051
-    to_port     = 5051
+    from_port   = 5601
+    to_port     = 5601
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     description = "Kibana"
